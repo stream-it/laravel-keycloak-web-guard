@@ -2,13 +2,10 @@
 
 namespace Vizir\KeycloakWebGuard\Services;
 
-use App\Models\User;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
-use http\Exception\InvalidArgumentException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Vizir\KeycloakWebGuard\Auth\KeycloakAccessToken;
 use Vizir\KeycloakWebGuard\Auth\PartyToken;
@@ -31,6 +28,7 @@ trait Uma2Configuration
 
     /**
      * Return resources and scopes for the authenticated user.
+     * The permissions are cached per session id.
      *
      * https://www.keycloak.org/docs/latest/authorization_services/index.html#_service_authorization_api
      *
@@ -60,7 +58,8 @@ trait Uma2Configuration
             $params = [
                 'grant_type' => 'urn:ietf:params:oauth:grant-type:uma-ticket',
                 'audience' => $this->getClientId(),
-                'response_mode' => 'permissions'
+                'response_mode' => 'permissions',
+//                'response_permissions_limit' => 11
             ];
 
             $response = $this->httpClient->request('POST', $url, [
@@ -88,7 +87,6 @@ trait Uma2Configuration
             Log::error('[Keycloak Service] ' . print_r($e->getMessage(), true));
         }
 
-
         Cache::put($cacheKey, $permissions);
 
         return $permissions;
@@ -109,7 +107,6 @@ trait Uma2Configuration
 
         if (count($args) == 2) {
 
-
             // Check if there an authorized resource on the authorizations list of the user.
             $resource = $this->authorizations()
                 ->filter(fn($permission) => $permission->name == $args[0])
@@ -128,7 +125,7 @@ trait Uma2Configuration
             return in_array($args[1], $resource->scopes);
         }
 
-        throw new InvalidArgumentException("The resource doesn't match the correct format");
+        throw new Exception("[Keycloak Service] The resource doesn't match the correct format \"resource:scope\".");
     }
 
     /**
