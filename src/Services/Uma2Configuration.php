@@ -103,8 +103,8 @@ trait Uma2Configuration
      */
     public function canAccess($resource)
     {
-
         if (!is_string($resource) || empty($resource)) return false;
+
         $args = explode(':', $resource);
 
         if (count($args) == 2) {

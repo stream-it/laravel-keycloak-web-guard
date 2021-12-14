@@ -197,6 +197,41 @@ This middleware works searching for all roles on default resource (client_id).
 
 You can extend it and register your own middleware on Kernel.php or just use `Auth::hasRole($roles, $resource)` on your Controller.
 
+## Resource based Authorizations
+If you want Keycloak to handle the logic about what an user can access, you probably want to user resources and scopes definied. Laravel Keycloak Web Guard implemets the gate`keycloak-access` which accepts a string formed by the resource name and the scope.
+```
+$this->middleware('keycloak-access', RESOURCE:SCOPE);
+```
+Internally the method `KeycloakWeb::canAccess(RESOURCE:SCOPE)` will be called and return true or false if the authenticated user is authorized to access the resource.
+
+```
+$this->middleware('keycloak-access', 'users-page:index');
+$this->middleware('keycloak-access', 'users-page:update');
+$this->middleware('keycloak-access', 'users-page:delete');
+```
+The package also provides a method `KeycloackWeb::authorizations()` which is used to retrieve all resources and scopes that the authenticated user has access, this method return a array with the folling format:
+```
+[
+  {
+    "name": "posts-page",
+    "scopes": [
+      "view",
+      "create",
+      "update",
+      "delete"
+    ]
+  },
+  {
+    "name": "users-page",
+    "scopes": [
+      "view",
+      "create",
+      "update",
+      "delete"
+    ]
+  }
+]
+```
 ## FAQ
 
 ### How to implement my Model?
