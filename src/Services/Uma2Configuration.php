@@ -42,7 +42,7 @@ trait Uma2Configuration
 
         $cacheKey = 'keycloak_web_guard_uma2-' . $this->realm . '-' . md5($token->parseAccessToken()['sid']);
         $permissions = Cache::get($cacheKey, []);
-        if (!empty($permissions) && config('app.debug') == false) {
+        if (!empty($permissions)) {
             return $permissions;
         }
 
