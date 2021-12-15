@@ -141,7 +141,7 @@ class KeycloakWebGuard implements Guard
 
         return true;
     }
-    
+
     /**
      * Check user is authenticated and return his resource roles
      *
