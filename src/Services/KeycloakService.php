@@ -324,6 +324,7 @@ class KeycloakService
 
             $user = $response->getBody()->getContents();
             $user = json_decode($user, true);
+            //dd($user);
 
             // Validate retrieved user is owner of token
             $token->validateSub($user['sub'] ?? '');
