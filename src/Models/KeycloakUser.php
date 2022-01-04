@@ -13,6 +13,8 @@ class KeycloakUser implements Authenticatable
      * @var array
      */
     protected $fillable = [
+        'id',
+        'username',
         'name',
         'email'
     ];

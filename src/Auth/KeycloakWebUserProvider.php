@@ -4,7 +4,6 @@ namespace Vizir\KeycloakWebGuard\Auth;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
-use Vizir\KeycloakWebGuard\Models\KeycloakUser;
 
 class KeycloakWebUserProvider implements UserProvider
 {
@@ -83,5 +82,15 @@ class KeycloakWebUserProvider implements UserProvider
     public function validateCredentials(Authenticatable $user, array $credentials)
     {
         throw new \BadMethodCallException('Unexpected method [validateCredentials] call');
+    }
+
+    /**
+     * Gets the name of the Keycloak user model.
+     *
+     * @return string
+     */
+    public function getModel()
+    {
+        return $this->model;
     }
 }
