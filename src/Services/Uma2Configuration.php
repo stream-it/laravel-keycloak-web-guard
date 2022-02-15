@@ -58,7 +58,7 @@ trait Uma2Configuration
                 'grant_type' => 'urn:ietf:params:oauth:grant-type:uma-ticket',
                 'audience' => $this->getClientId(),
                 'response_mode' => 'permissions',
-                'response_permissions_limit' => 19
+                'response_permissions_limit' => 30
             ];
 
             $response = $this->httpClient->request('POST', $url, [
