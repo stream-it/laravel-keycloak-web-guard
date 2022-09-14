@@ -40,6 +40,8 @@ trait Uma2Configuration
     {
         $token = new KeycloakAccessToken($this->retrieveToken());
 
+        if(empty($token->parseAccessToken())) return collect();
+
         $cacheKey = 'keycloak_web_guard_uma2-' . $this->realm . '-' . md5($token->parseAccessToken()['sid']);
         $permissions = Cache::get($cacheKey, []);
         if (!empty($permissions)) {
